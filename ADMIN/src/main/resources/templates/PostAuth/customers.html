@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Customers List</title>
+  <!-- Include Bootstrap CSS for styling -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Include custom CSS for dark theme -->
+</head>
+<body>
+<div class="container mt-4">
+  <h1 class="text-black-50 mb-" style="text-align: center">Customers</h1>
+  <div th:if="${info!=null && info.isEmpty()==false}" th:text="${info}" class="alert-primary d-flex p-1 mb-2 justify-content-center"></div>
+  <form method="post">
+    <input th:value="${_csrf.getToken()}" type="hidden" name="_csrf">
+    <button class="btn alert-success" th:formaction="@{/customers/enable-referral}">Enable Referral</button>
+    <button class="btn alert-warning" th:formaction="@{/customers/disable-referral}">Disable Referral</button>
+  </form>
+
+  <table class="table-responsive">
+    <thead>
+    <tr>
+      <th class="p-4">Email</th>
+      <th class="p-4">Username</th>
+      <th class="p-4">Created On</th>
+      <th class="p-4">Updated</th>
+      <th class="p-4">Deleted</th>
+      <th class="p-4">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customer : ${customers}">
+      <td class="p-4" th:text="${customer.getEmail()}"></td>
+      <td class="p-4" th:text="${customer.getUsername()}"></td>
+      <td class="p-4" th:text="${customer.getCreatedOn()}"></td>
+      <td class="p-4" th:text="${customer.getUpdatedOn()}"></td>
+      <td class="p-4" th:text="${customer.isDeleted()}"></td>
+      <td class="p-4">
+        <form method="post">
+          <input type="hidden" name="_csrf"  th:value="${_csrf.getToken()}">
+          <button class="btn btn-danger" th:if="${!customer.isBlocked()}" th:formaction="@{/customers/block/{id}(id=${customer.id})}">Block</button>
+          <button class="btn btn-warning" th:if="${customer.isBlocked()}" th:formaction="@{/customers/unblock/{id}(id=${customer.id})}">Un-Block</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

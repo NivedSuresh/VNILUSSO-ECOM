@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=vnilusso'
+      - 'POSTGRES_PASSWORD=2255'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  admin:
+    image: nivedsuresh/vnilusso-admin:1.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vnilusso
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 2255
+      SPRING_PROFILES_ACTIVE: k8s
+  customer:
+    image: nivedsuresh/vnilusso-customer:1.0
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_started
+    environment:
+      POSTGRES_PASSWORD: 2255
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vnilusso
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 2255
+      SPRING_PROFILES_ACTIVE: k8s
+
+volumes:
+  postgres:

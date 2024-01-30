@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="Fragments/fragments::meta"></head>
+
+<body>
+    <main>
+        <header th:replace="/Fragments/fragments::header-s"></header>
+        <div class="d-flex justify-content-center mt-3" style="width: 100%; height: 7vh">
+            <p th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></p>
+        </div>
+        <section class="content-main mb-80">
+            <div class="card mx-auto card-login mt-5">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Create an Account</h4>
+                    <form th:action="@{/create-save}" method="post" th:object="${adminDto}">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" placeholder="Your email" type="text" name="username" id="username">
+                        </div> <!-- form-group// -->
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input class="form-control" placeholder="First Name" type="text" name="firstName" id="firstName">
+                        </div> <!-- form-group// -->
+                        <div class="mb-3">
+                            <label class="form-label">Last name</label>
+                            <input class="form-control" placeholder="Last Name" type="text" name="lastName" id="lastName">
+                        </div> <!-- form-group// -->
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input th:field="${adminDto.password}" class="form-control" placeholder="Password" type="Password" name="password" id="password">
+                        </div> <!-- form-group// -->
+                        <div class="mb-3">
+                            <label class="form-label">Re-enter password</label>
+                            <input class="form-control" placeholder="Repeat password" type="Password" name="repeatPassword" id="repeatPassword">
+                        </div> <!-- form-group// -->
+                        <div class="mb-3">
+                            <p class="small text-center text-warning">By adding another admin you are letting someone else access admin functionalities.</p>
+                        </div> <!-- form-group  .// -->
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-primary w-100"> Add </button>
+                        </div> <!-- form-group// -->
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="main-footer text-center">
+            <p class="font-xs">
+                <script>
+                document.write(new Date().getFullYear())
+                </script> ©, Evara - HTML Ecommerce Template .
+            </p>
+            <p class="font-xs mb-30">All rights reserved</p>
+        </footer>
+    </main>
+    <div th:replace="Fragments/fragments::script"></div>
+</body>
+
+delete from customer_addresses where customer_id = 17;
+delete from wallet where customer_id = 17;
+delete from orders where customer_id = 17;
+delete from order_items where customer_id = 17;
+
+</html>

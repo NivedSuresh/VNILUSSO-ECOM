@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: common-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: common-svc
+                port:
+                  number: 8081
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: common-svc
+                port:
+                  number: 8080

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/imgs/theme/favicon.svg}">
+    <!-- Template CSS -->
+    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+
+    <aside th:replace="/Fragments/fragments::aside"></aside>
+
+    <main class="main-wrap">
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Products grid</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+                <div>
+                    <a th:href="@{/add-product}" class="btn btn-primary btn-sm rounded">Create new</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <form class="row gx-3" th:action="@{/products/search}" method="post">
+                        <div class="col-lg-4 col-md-6 me-auto d-flex">
+                            <input type="text" placeholder="Search" class="form-control" name="product-name">
+                            <button type="submit" class="btn btn-primary ml-5">Search</button>
+                        </div>
+                    </form>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5" >
+                        <div class="col" th:each="product: ${products}">
+                            <div class="card card-product-grid">
+                                <a href="#" class="img-5"> <img th:src="@{'/product-images/'+${product.getImagesUrls().get(0)}}" alt="Product"> </a>
+                                <form class="info-wrap" method="post">
+                                    <input th:value="${_csrf.getToken()}" type="hidden" name="_csrf">
+                                    <a href="#" class="title text-truncate" th:text="${product.getName()}" ></a>
+                                    <div class="price mb-2" th:text="${product.getSalePrice()}"></div> <!-- price.// -->
+                                    <button th:formaction="@{/products/edit/{id}(id=${product.getId()})}" class="btn btn-sm font-sm rounded btn-brand">
+                                        <i class="material-icons md-edit"></i> Edit
+                                    </button>
+                                    <button th:if="${!product.isDeleted()}" th:formaction="@{/products/disable/{id}(id=${product.getId()})}" class="btn btn-sm font-sm rounded btn-warning">
+                                        <i class="material-icons md-edit"></i> Disable
+                                    </button>
+                                    <button th:if="${product.isDeleted()}" th:formaction="@{/products/enable/{id}(id=${product.getId()})}" class="btn btn-sm font-sm rounded btn-success">
+                                        <i class="material-icons md-edit"></i> Enable
+                                    </button>
+                                </form>
+                            </div> <!-- card-product  end// -->
+                        </div> <!-- col.// -->
+                    </div> <!-- row.// -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+
+            <!--Pagination-->
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script th:replace="/Fragments/fragments::script"></script>
+</body>
+
+</html>

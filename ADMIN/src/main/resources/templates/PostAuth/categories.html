@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside th:replace="/Fragments/fragments::aside"></aside>
+    <main class="main-wrap">
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                    <p>Add, edit or delete a category</p>
+                </div>
+                <form th:action="@{/categories/search}" class="d-flex" method="post">
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                    <button type="submit" class="btn btn-primary" style="height: 5vh">Search</button>
+                </form>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <form th:action="@{/categories/create}" method="post">
+                                <div class="mb-4">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" placeholder="Type here" class="form-control" name="category" />
+                                    <span class="alert-danger" th:if="${result}"><span th:if="${result.getFieldError('category')!=null}"
+                                    th:text="${result.getFieldError('category').getDefaultMessage()}"></span></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label>In-activate</label>
+                                    <input type="checkbox" name="isDeleted" value="true">
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-primary" type="submit">Create category</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover" style="text-align: center">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Active</th>
+                                            <th>Orders</th>
+                                            <th>Average Price</th>
+                                            <th>Products</th>
+                                            <th>Action</th>
+                                            <th>Apply Off</th>
+                                            <th>Discount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody th:each="category: ${categories}" style="text-align: center">
+                                        <tr>
+                                            <td class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </td>
+                                            <td th:text="${category.getId()}"></td>
+                                            <td><b th:text="${category.getCategory()}"></b></td>
+                                            <td th:text="${!category.isDeleted()}"></td>
+                                            <td th:text="${category.getOrders()}"></td>
+                                            <td th:text="${category.getAvg_price()}"></td>
+                                            <td th:text="${category.getProducts()}"></td>
+                                            <td class="text-end">
+                                                <form method="post" style="text-align: center">
+                                                    <button th:if="${category.isDeleted()}" class="btn btn-success" th:formaction="@{/categories/enable/{id}(id=${category.getId()})}">Enable</button>
+                                                    <button th:if="${!category.isDeleted()}" class="btn btn-warning" onclick="return confirmDelete();" th:formaction="@{/categories/delete/{id}(id=${category.getId()})}">Disable</button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form method="post" th:action="@{/categories/apply_off/{id}(id=${category.getId()})}">
+                                                    <input name="offPercentage" th:value="${category.getDiscountPercentage()}" style="width: 6vh; border-radius: 5px" max="80" type="number">
+                                                    <button class="btn btn-outline-success">✔️</button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form method="post" th:action="@{/categories/reset_off/{id}(id=${category.getId()})}">
+                                                    <button class=" btn btn-outline-danger">X</button>
+                                                    <p th:text="${category.getDiscountPercentage()+'%'}"></p>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script type="text/javascript">
+        function confirmDelete() {
+            if (confirm("Are you sure you want to Disable this category? " +
+                "None of the products from this category will be visible to the user if Disabled!")) {
+                // If the user confirms, submit the form
+                document.getElementById("removeCategoryForm").submit();
+            } else {
+                // If the user cancels, do nothing
+                return false;
+            }
+        }
+
+
+        function applyOffOnCategory(categoryId){
+            alert(categoryId)
+        }
+
+
+    </script>
+
+    <script th:replace="/Fragments/fragments::script"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+</html>

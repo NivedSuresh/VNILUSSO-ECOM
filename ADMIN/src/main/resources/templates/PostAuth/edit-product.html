@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside th:replace="/Fragments/fragments::aside"></aside>
+    <main class="main-wrap">
+
+        <header th:replace="/Fragments/fragments::header-s"></header>
+        <div class="alert-success d-flex justify-content-center" th:if="${param.success}">Product updated successfully.</div>
+        <div class="alert-danger d-flex justify-content-center" th:if="${param.error}">Check all fields before updating.</div>
+        <section class="content-main">
+
+            <!--d-flex added-->
+            <div class="d-flex">
+                <div class="row">
+                    <div class="col-9">
+                        <div class="content-header">
+                            <h2 class="content-title">Update Product</h2>
+                        </div>
+                    </div>
+
+
+                    <!--form for data updation excluding images-->
+                    <form class="col-lg-6" method="post" th:action="@{/products/edit/save/{id}(id=${product.id})}">
+                        <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between">
+                                <h4>Product Details</h4>
+                                <div>
+                                    <label style="font-weight: bolder">
+                                        On-sale
+                                    </label>
+                                    <input style="width: 2vh; height: 2vh" type="checkbox" name="onSale" value="true" th:checked="${product.isOnSale()}">
+
+                                </div>
+                                <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Product name</label>
+                                        <input th:value="${product.getName()}" type="text" placeholder="Type here" name="name" class="form-control" id="product_name">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Brand</label>
+                                        <input th:value="${product.getBrand()}" type="text" placeholder="Type here" name="brand" class="form-control">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Full description</label>
+                                        <textarea th:text="${product.getDescription()}" placeholder="Type here" class="form-control" name="description" rows="4"></textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">Regular price</label>
+                                                <div class="row gx-2">
+                                                    <input placeholder="$" th:value="${product.getCostPrice()}" type="text" class="form-control" name="costPrice">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">Promotional price</label>
+                                                <input th:value="${product.getSalePrice()}" placeholder="$" type="text" class="form-control" name="salePrice">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">Quantity</label>
+                                                <input th:value="${product.getQuantity()}" placeholder="$" type="text" class="form-control" name="quantity">
+                                            </div>
+                                        </div>
+                                        <div class="card mb-4">
+                                            <div class="card-header">
+                                                <h4>Category and Size</h4>
+                                            </div>
+                                            <div th:each="image: ${product.getImagesUrls()}">
+                                                <input type="hidden" name="imagesUrls" th:value="${image}">
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-grid gx-2">
+                                                    <div class="col-sm-6 mb-3 d-f">
+                                                        <label class="form-label">Category</label>
+                                                        <select id="product_categories" name="category" class="form-control">
+                                                        <option th:value = "null">-SELECT-</option>
+                                                        <option th:each = "category : ${categories}"
+                                                                th:value = "${category.getId()}"
+                                                                th:text = "${category.getCategory()}">
+                                                        </option>
+                                                    </select>
+                                                    </div>
+                                                    <div class="size-options ml-5">
+                                                        <p>Currently available : <span th:text="${product.getSize()}"></span></p>
+                                                        <label>
+                                                            <input type="checkbox" name="size" value="small">
+                                                            Small
+                                                        </label>
+                                                        <label>
+                                                            <input type="checkbox" name="size" value="medium">
+                                                            Medium
+                                                        </label>
+                                                        <label>
+                                                            <input type="checkbox" name="size" value="large">
+                                                            Large
+                                                        </label>
+                                                        <label>
+                                                            <input type="checkbox" name="size" value="extra-large">
+                                                            Extra-Large
+                                                        </label>
+                                                        <label>
+                                                            <input type="checkbox" name="size" value="double-xl">
+                                                            Double-Xl
+                                                        </label>
+                                                    </div>
+                                                </div> <!-- row.// -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- card end// --><!-- card end// -->
+                    </form>
+
+
+                    <!--form for image updation-->
+                    <div class="col-lg-3 ml-15">
+
+                        <form th:action="@{/products/edit/upload-image/{id}(id=${product.getId()})}"
+                             method="post" class="card mb-4" enctype="multipart/form-data">
+                            <div class="card-header">
+                                <h4>Add Media</h4>
+                                <button type="submit" class="btn btn-outline-primary">Upload</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <img th:src="@{/imgs/theme/upload.svg}" alt="">
+                                    <input class="form-control" type="file" name="images" accept="image/png, image/jpeg, image/avif, image/webp" multiple>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!--form for image deletion-->
+            <div>
+                <div style="width: 20vh; height: 20vh" class="d-inline-flex" th:each="image: ${product.getImagesUrls()}">
+                    <form method="post" class="d-grid">
+                        <input type="hidden" th:value="${_csrf.getToken()}" name="_csrf">
+                        <img th:src="@{'/product-images/' + ${image}}">
+                        <p th:text="${image}"></p>
+                        <button th:formaction="@{'/products/delete/' + ${product.getId()} + '/' + ${image}}"
+                                onclick="return confirm('Are you sure you want to proceed?');" class="btn btn-danger mt-2">Remove</button>
+                    </form>
+                </div>
+            </div>
+        </section> <!-- content-main end// -->
+    </main>
+
+
+    <script th:replace="/Fragments/fragments::script"></script>
+</body>
+
+</html>

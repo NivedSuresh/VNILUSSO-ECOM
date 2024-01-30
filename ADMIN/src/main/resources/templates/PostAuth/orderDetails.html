@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside th:replace="/Fragments/fragments::aside"></aside>
+    <main class="main-wrap">
+        <header th:replace="/Fragments/fragments::header-s"></header>
+        <div th:if="${param.success}" class="alert-success d-flex justify-content-center">Product status updated successfully</div>
+        <div th:if="${param.error}" class="alert-danger d-flex justify-content-center">Couldn't update, order might be cancelled</div>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order detail</h2>
+                    <p th:text="${'Details for Order ID : '+order.getId()}"></p>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b th:text="${order.getOrderDate()}"></b>
+                                <br>
+                                <i class="material-icons md-calendar_today"></i> <b th:text="${order.getDeliveryDate()}"></b>
+                            </span> <br>
+                            <small class="text-muted" th:text="${'Order ID : '+order.getId()}"></small>
+                        </div>
+                        <form method="post" th:action="@{/order/update/{id}(id=${order.getId()})}" th:if="${order.getOrderStatus()!='CANCELLE'}" class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <label>
+                                <select name="status" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                                    <option th:value="${order.getOrderStatus()}" th:text="${'Current : '+order.getOrderStatus()}"></option>
+                                    <option th:value="${'CANCELLED'}">CANCELLED</option>
+                                    <option th:value="${'PROCESSING'}">PROCESSING</option>
+                                    <option th:value="${'ACCEPTED'}">ACCEPTED</option>
+                                    <option th:value="${'SHIPPED'}">SHIPPED</option>
+                                    <option th:value="${'DELIVERED'}">DELIVERED</option>
+                                </select>
+                            </label>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+                        </form>
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-person"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1" th:text="${order.getOrderAddress().getRecipientName()}">
+                                         <br> <template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template> <br> +998 99 22123456
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">Shipping: Delhivery
+                                    <p th:text="${'Pay method : '+order.getPaymentMethod()}"></p>
+                                    <p th:text="${'Status : '+order.getOrderStatus()}"></p>
+                                    <a href="#">Download info</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-place"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1" th:text="${'City : '+order.getOrderAddress().getCity()}">
+                                    <p th:text="${order.getOrderAddress().getHouseName()}">
+                                    <p th:text="${'Zipcode : '+order.getOrderAddress().getZipcode()}"></p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                    </div> <!-- row // -->
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="table-responsive">
+                                <table class="table text-center">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="30%">Unit Price</th>
+                                            <th width="10%">Quantity</th>
+                                            <th width="20%" class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="item :${order.getOrderItems()}">
+                                            <td>
+                                                <a class="itemside" th:href="@{/products/edit/{id}(id=${item.getProduct().getId()})}">
+                                                    <div class="left">
+                                                        <img th:src="@{'/product-images/' + ${item.getProduct().getImagesUrls().get(0)}}" width="40" height="40" class="img-xs" alt="Item"></div>
+                                                    <div class="info" th:text="${item.getProduct().getName()}">  </div>
+                                                </a>
+                                            </td>
+                                            <td th:text="${item.getProduct().getSalePrice()+'$'}"></td>
+                                            <td th:text="${item.getQuantityPerItem()}">  </td>
+                                            <td class="text-end" th:text="${item.getProduct().getSalePrice()*item.getQuantityPerItem()+'$'}">  </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold" th:text="${'Tax : $'+order.getTax()}"></td>
+                                            <td class="fw-bold" th:text="${'Order Total : $'+order.getTotalPrice()}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive// -->
+                        </div> <!-- col// -->
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-4">
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment info</h6>
+                                <p th:text="${'Payment Method : '+order.getPaymentMethod()}"></p>
+                                <p c th:if="${order.getPayment().getStatus()=='PAID'}" th:text="${order.getPayment().getStatus()}" class="alert-success text-center"></p>
+                                <p th:if="${order.getPayment().getStatus()!='PAID'}" th:text="${order.getPayment().getStatus()}" class="alert-danger text-center"></p>
+                                <div>
+                                    <p th:text="${'Reciept : '+order.getPayment().getReceipt()}"></p>
+                                    <p th:text="${'RazorPay Order ID : '+order.getPayment().getRazorpayOrderId()}"></p>
+                                    <p th:text="${'Payment ID : '+order.getPayment().getPaymentId()}"></p>
+                                    <p class="alert-warning text-center" th:text="${'Refund Status : '+order.getPayment().getRefundStatus()}"></p>
+                                </div>
+
+                            </div>
+                            <form method="post" th:action="@{/order/accept_return_refund/{id}(id=${order.getId()})}" th:if="${order.getReturnRequest()!=null && order.getReturnRequest().getReturnRequest()==true &&
+                            order.getPayment().getStatus()=='PAID' && !order.getReturnRequest().getReturnAccepted()}" class="h-25 pt-4">
+                                <button class="btn btn-primary">Initiate Refund</button>
+                            </form>
+                        </div> <!-- col// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script data-cfasync="false" src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script th:replace="/Fragments/fragments::script"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
+</html>

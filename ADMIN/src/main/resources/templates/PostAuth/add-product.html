@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<head th:replace="~{Fragments/fragments::head}"></head>
+<body>
+<div class="screen-overlay"></div>
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+        <a th:href="@{/dashboard}" class="brand-wrap">
+            <img th:src="@{imgs/theme/logo.svg}" class="logo" alt="Evara Dashboard">
+        </a>
+        <div>
+            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+        </div>
+    </div>
+    <aside th:replace="~{Fragments/fragments::aside}"></aside>
+</aside>
+<main class="main-wrap">
+
+    <header th:replace="Fragments/fragments::header-s"></header>
+
+    <div th:if="${session.info}" style="height: 3vh" class="d-flex alert-success justify-content-center"><span th:text="${session.info}"></span></div>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-6">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+                    <div>
+                        <button id="submitButton" class="btn btn-md rounded font-sm hover-up">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <form id="myForm" th:action="@{/add-product}" method="post"
+                  enctype="multipart/form-data">
+                <fieldset>
+                    <!-- Form Name -->
+<!--                    <legend>ADD NEW PRODUCT</legend>-->
+                    <!-- Text input-->
+                    <div class="form-group align-content-center">
+                        <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>
+                        <div class="col-md-4">
+                            <input id="product_name" name="name" class="form-control input-md" required="" type="text">
+                        </div>
+                        <span th:if="${result!=null && result.hasErrors() && result.getFieldError('name')!=null}" class="alert-danger">Error</span>
+                    </div>
+
+                    <!-- Select Basic -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="product_categories">PRODUCT CATEGORY</label>
+                        <div class="col-md-4">
+                            <select id="product_categories" name="category" class="form-control">
+                                <option th:value = "null">-SELECT-</option>
+                                <option th:each = "category : ${categories}"
+                                        th:value = "${category.getId()}"
+                                        th:text = "${category.getCategory()}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="description">PRODUCT DESCRIPTION</label>
+                        <div class="col-md-4">
+                            <input id="description" name="description" class="form-control input-md" required="" type="text">
+                        </div>
+                    </div>
+
+                    <div class="size-options">
+                        <label>
+                            <input type="checkbox" name="size" value="small">
+                            Small
+                        </label>
+                        <label>
+                            <input type="checkbox" name="size" value="medium">
+                            Medium
+                        </label>
+                        <label>
+                            <input type="checkbox" name="size" value="large">
+                            Large
+                        </label>
+                        <label>
+                            <input type="checkbox" name="size" value="extra-large">
+                            Extra-Large
+                        </label>
+                        <label>
+                            <input type="checkbox" name="size" value="double-xl">
+                            Double-Xl
+                        </label>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="description">BRAND</label>
+                        <div class="col-md-4">                                                                                 <!-- Text input-->
+                            <input id="brand" name="brand" class="form-control input-md" required="" type="text">  <div class="form-group">
+                        </div>
+                            <label class="col-md-4 control-label" for="available_quantity">AVAILABLE QUANTITY</label>
+                    </div>
+                        <div class="col-md-4">
+                            <input id="available_quantity" name="quantity" class="form-control input-md" required="" type="text">
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="costPrice">COST PRICE</label>
+                        <div class="col-md-4">
+                            <input id="costPrice" name="costPrice" class="form-control input-md" required="" type="text">
+                        </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="salePrice">SALE PRICE</label>
+                        <div class="col-md-4">
+                            <input id="salePrice" name="salePrice" class="form-control input-md" required="" type="text">
+                        </div>
+
+                    </div>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <div class="col-md-9">
+                                <div class="mb-4">
+                                    <label class="form-label">Images</label>
+                                    <input type="file" name="imagesUrls" accept="image/png, image/jpeg, image/avif, image/webp" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+    </section> <!-- content-main end// -->
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script>
+                    document.write(new Date().getFullYear())
+                </script> ©, Pursify All rights reserved.
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">
+
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+
+<div th:replace="/Fragments/fragments::script" ></div>
+
+<script>
+    document.getElementById("submitButton").addEventListener("click", function() {
+        // Trigger the form submission when the button is clicked
+        document.getElementById("myForm").submit();
+    });
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html class="no-js" lang="en">
+
+<head th:replace="~{Fragments/fragments::meta}"></head>
+
+<body>
+    <main>
+        <header class="main-header style-2 navbar">
+            <div class="col-brand">
+                <a th:href="@{index.html}" class="brand-wrap">
+                    <img th:src="@{/imgs/theme/logo.svg}" class="logo" alt="">
+                </a>
+            </div>
+            <div class="col-nav">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <p th:if="${info}" class="alert-success d-flex justify-content-center" th:text="${info}"></p>
+        <p th:if="${param.invalid}" class="alert-danger d-flex justify-content-center">!! Bad credentials</p>
+        <section class="content-main mt-80 mb-80">
+
+            <div class="card mx-auto card-login">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Sign in</h4>
+                    <form th:action="@{/authenticate}" method="post">
+                        <div class="mb-3">
+                            <input type="text" placeholder="email" class="form-control" name="username" th:value="${username}">
+                        </div>
+
+                        <div class="mb-3 d-flex">
+                            <input type="text" placeholder="OTP" class="form-control col-sm mr-10" id="otp" name="otp">
+                            <button type="submit" class="btn btn-primary mb-2" th:formaction="@{/send-otp}">Send OTP</button>
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Password" type="password" id="password" name="password">
+                        </div> <!-- form-group// -->
+
+                        <div class="mb-3">
+                            <button th:formaction="@{/forgot-password}" class="float-end font-sm text-muted">Forgot password?</button>
+                            <label class="form-check">
+                                <input type="checkbox" class="form-check-input" checked="">
+                                <span class="form-check-label">Remember</span>
+                            </label>
+                        </div> <!-- form-group form-check .// -->
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-primary w-100"> Login </button>
+                        </div> <!-- form-group// -->
+                    </form>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center"><p th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></p></div>
+            <div class="d-flex justify-content-center"><p th:if="${param.error}" class="alert alert-danger" role="alert">Credentials didn't match</p></div>
+        </section>
+        <footer class="main-footer text-center">
+            <p class="font-xs">
+                <script>
+                document.write(new Date().getFullYear())
+                </script> ©, VNILUSSO
+            </p>
+            <p class="font-xs mb-30">All rights reserved</p>
+        </footer>
+    </main>
+    <script src="/js/main.js?v=3.4"></script>
+</body>
+
+</html>

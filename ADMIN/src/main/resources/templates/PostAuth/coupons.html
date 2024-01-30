@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside th:replace="/Fragments/fragments::aside"></aside>
+    <main class="main-wrap">
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Coupons </h2>
+                    <p>Add, edit or disable a coupon</p>
+                </div>
+                <form th:action="@{/coupons/search}" class="d-flex" method="post">
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                    <button type="submit" class="btn btn-primary" style="height: 5vh">Search</button>
+                </form>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <form th:action="@{/coupons/add}" method="post">
+                                <div class="mb-4">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" placeholder="Type here" class="form-control" name="coupon" />
+                                    <span class="alert-danger" th:if="${addCoupon}"><span th:if="${addCoupon.getFieldError('coupon')!=null}"
+                                    th:text="${addCoupon.getFieldError('coupon').getDefaultMessage()}"></span></span>
+                                </div>
+                                <div>
+                                    <label>Minimum Spend</label>
+                                    <input name="minSpend" type="number" class="form-control" placeholder="type here">
+                                    <span class="alert-danger" th:if="${addCoupon}"><span th:if="${addCoupon.getFieldError('minSpend')!=null}"
+                                                                                          th:text="${addCoupon.getFieldError('minSpend').getDefaultMessage()}"></span></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Off Percentage</label>
+                                    <input type="number" placeholder="Type here" class="form-control" name="offPercentage" />
+                                    <span class="alert-danger" th:if="${addCoupon}"><span th:if="${addCoupon.getFieldError('offPercentage')!=null}"
+                                                                                                  th:text="${addCoupon.getFieldError('offPercentage').getDefaultMessage()}"></span></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Max Off Amount</label>
+                                    <input type="number" placeholder="Type here" class="form-control" name="maxOffAmount" />
+                                    <span class="alert-danger" th:if="${addCoupon}"><span th:if="${addCoupon.getFieldError('maxOffAmount')!=null}"
+                                                                                                  th:text="${addCoupon.getFieldError('maxOffAmount').getDefaultMessage()}"></span></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Usage Allowed Per Customer</label>
+                                    <input type="number" placeholder="Type here" class="form-control" name="usageAllowedPerCustomer" />
+                                    <span class="alert-danger" th:if="${addCoupon}"><span th:if="${addCoupon.getFieldError('usageAllowedPerCustomer')!=null}"
+                                                                                                  th:text="${addCoupon.getFieldError('usageAllowedPerCustomer').getDefaultMessage()}"></span></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Set Expiry Date</label>
+                                    <input type="datetime-local" placeholder="Type here" class="form-control" name="couponExpiryDate" />
+                                    <span class="alert-danger" th:if="${addCoupon}"><span th:if="${addCoupon.getFieldError('couponExpiryDate')!=null}"
+                                                                                          th:text="${addCoupon.getFieldError('couponExpiryDate').getDefaultMessage()}"></span></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label>Activate</label>
+                                    <input type="checkbox" name="isActive" th:checked="${true}" th:value="${'true'}">
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover" style="text-align: center">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </th>
+                                            <th>Name</th>
+                                            <th>Active</th>
+                                            <th>Off Percentage</th>
+                                            <th>Usage Allowed</th>
+                                            <th>Maximum Off</th>
+                                            <th>Min Spend</th>
+                                            <th>Expiry</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody th:each="coupon: ${coupons}" style="text-align: center">
+                                        <tr>
+                                            <td class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </td>
+                                            <td><b th:text="${coupon.getCoupon()}"></b></td>
+                                            <td th:text="${coupon.getIsActive()}"></td>
+                                            <td th:text="${coupon.getDiscountPercentage()+'%'}"></td>
+                                            <td th:text="${coupon.getUsageAllowedPerCustomer()}"></td>
+                                            <td th:text="${coupon.getMaxDiscountAmount()+'$'}"></td>
+                                            <td th:text="${coupon.getMinSpend()+'$'}"></td>
+                                            <td th:text="${coupon.getExpiryDate()}"></td>
+                                            <td class="text-end">
+                                                <form style="text-align: center">
+                                                    <button class="btn btn-outline-primary" th:formaction="@{/coupons/edit/{id}(id=${coupon.getId()})}">Edit</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, VNILUSSO
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script type="text/javascript">
+        function confirmDelete() {
+            if (confirm("Are you sure you want to Disable this coupon?"))
+                document.getElementById("removeCategoryForm").submit();
+            else return false;
+        }
+    </script>
+
+    <script th:replace="/Fragments/fragments::script"></script>
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/Fragments/fragments::meta">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff; /* Text color */
+        }
+
+        .card {
+            background-color: #333; /* Card background color */
+            border: 1px solid #555; /* Card border color */
+            border-radius: 5px;
+        }
+
+        .table {
+            background-color: #333; /* Table background color */
+        }
+    </style>
+</head>
+<body class="d-flex" style="opacity: 90%">
+    <div class="flex-sm-grow-1"><div th:replace="/Fragments/fragments::aside"></div></div>
+    <div class="flex-lg-nowrap mr-40">
+        <div class="container mt-4">
+            <h3 class="mt-4 text-center alert-heading mb-50">STATISTICS</h3>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <form th:action="@{/order_summary}">
+                        <select name="orderStatus">
+                            <option th:value="${'DELIVERED'}">DELIVERED</option>
+                            <option th:value="${'CANCELLED'}">CANCELLED</option>
+                            <option th:value="${'RETURN'}">RETURN</option>
+                        </select>
+                        <button type="submit" class="btn">Order Summary</button>
+                    </form>
+                </div>
+                <div>
+                    <a class="btn" th:href="@{/sales_report}">Sales Report</a>
+                </div>
+            </div>
+            <form>
+
+            <hr>
+            <div class="row">
+                <div class="card mb-4">
+                    <article class="card-body">
+                        <h5 class="card-title text-center">Sales Per Category (Including Tax)</h5>
+                        <div style="width: 100%" class="d-flex justify-content-center">
+                            <div style="width: 400px; height: 400px;">
+                                <canvas id="myChart2"></canvas>
+                            </div>
+                        </div>
+
+                    </article>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card mb-4">
+                    <article class="card-body">
+                        <h5 class="card-title text-center">Orders</h5>
+                        <canvas id="myChart3" height="120px"></canvas>
+                    </article>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Products</h5>
+                            <p style="font-size: 16px" class="card-text" id="totalProducts" th:text="${statistics.getTotalProducts()+' products'}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Categories</h5>
+                            <p style="font-size: 16px" class="card-text" id="totalCategories" th:text="${statistics.getTotalCategories()+' categories'}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Delivered</h5>
+                            <p style="font-size: 16px" class="card-text" id="totalOrders" th:text="${statistics.getTotalOrders()+' orders'}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Daily Sales</h5>
+                            <h6 class="card-text" id="dailySales" th:text="${statistics.getDailySales() +'$'}"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Weekly Sales</h5>
+                            <h6 class="card-text" id="weeklySales" th:text="${statistics.getWeeklySales()+'$'}"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" >Monthly Sales</h5>
+                            <h6 class="card-text" id="monthlySales" th:text="${statistics.getMonthlySales() +'$'}"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Yearly Sales</h5>
+                            <h6 class="card-text" id="yearlySales" th:text="${statistics.getYearlySales()+'$'}"></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4 mb-40">
+                <h4 style="text-align: center; border-radius: 10px" class="alert-success p-2">Sales per Product</h4>
+                <div class="col-md-12">
+                    <table class="table mt-10 text-center">
+                        <thead>
+                        <tr style="font-size: 20px">
+                            <th>Details</th>
+                            <th>Order Count</th>
+                            <th>Sales</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${statistics.getMostSoldProducts()}">
+                            <td>
+                                <a th:href="@{/products/edit/{id}(id=${product.getProduct().getId()})}">
+                                    <h6 th:text="${product.product.getName()}"></h6>
+                                </a>
+                            </td>
+                            <td>
+                                <h6 th:text="${product.getCount()}"></h6>
+                            </td>
+                            <td>
+                                <h6 th:text="${'$'+product.getSales()}"></h6>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 10%"></div>
+
+    <script th:inline="javascript">
+        let categories = [[${statistics.getSalesPerCategory().keySet()}]];
+        let salesPerCategory = [[${statistics.getSalesPerCategory().values()}]];
+        let orderStatus = [[${statistics.getOrderStatusCount().keySet()}]];
+        let orderStatusCount = [[${statistics.getOrderStatusCount().values()}]];
+    </script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/admin/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin/js/vendors/select2.min.js"></script>
+    <script src="/admin/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/admin/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="/admin/js/main.js" type="text/javascript"></script>
+    <script src="/admin/js/custom-chart.js" type="text/javascript"></script>
+</body>
+</html>
+
+
+
