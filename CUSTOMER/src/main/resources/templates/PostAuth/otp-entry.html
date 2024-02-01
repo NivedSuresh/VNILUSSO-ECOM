@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Verification</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body style="background-color: black">
+<div  class="text-danger"><p th:text="${error}" class="text-danger"></p></div>
+<div class="container d-flex justify-content-center align-content-center" style="margin-top: 40vh">
+  <form method="post" class="d-flex">
+    <div class="form-group">
+      <input type="hidden" class="form-control-sm"  name="email" style="height: 35px" th:value="${email}" required>
+      <label for="otp" style="color: beige">Enter OTP:</label>
+      <input type="text" class="form-control-sm" id="otp" name="otp" style="height: 35px" required>
+    </div>
+    <input type="hidden"  name="_csrf" th:value="${_csrf.getToken()}">
+    <buttontype="submit" th:formaction="@{/profile/update/verify-otp}" class="btn btn-primary" style="height: 35px; margin-left: 10px">Verify OTP</button>
+  </form>
+</div>
+</body>
+</html>

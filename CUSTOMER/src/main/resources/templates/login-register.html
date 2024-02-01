@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <header th:replace="/Fragments/fragments::header"></header>
+
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a><img src="/imgs/theme/logo.svg" alt="logo"></a>
+                </div>
+                <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-header-content-area">
+                <div class="mobile-search search-style-3 mobile-header-border">
+                    <form action="#">
+                        <input type="text" placeholder="Search for items…">
+                        <button type="submit"><i class="fi-rs-search"></i></button>
+                    </form>
+                </div>
+                <div class="mobile-menu-wrap mobile-header-border">
+                    <div class="main-categori-wrap mobile-header-border">
+                        <a class="categori-button-active-2" href="#">
+                            <span class="fi-rs-apps"></span> Browse Categories
+                        </a>
+                    </div>
+                </div>
+                <div class="mobile-header-info-wrap mobile-header-border">
+                    <div class="single-mobile-header-info mt-30">
+                        <a  href="page-contact.html"> Our location </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="page-login-register.html">Log In / Sign Up </a>
+                    </div>
+                    <div class="single-mobile-header-info">
+                        <a href="#">(+01) - 2345 - 6789 </a>
+                    </div>
+                </div>
+                <div class="mobile-social-icon">
+                    <h5 class="mb-15 text-grey-4">Follow Us</h5>
+                    <a href="#"><img src="/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                    <a href="#"><img src="/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Pages
+                    <span></span> Login / Register
+                </div>
+            </div>
+        </div>
+        <div th:if="${info}" class="alert-success d-flex justify-content-center mt-10"><p th:text="${info}" class="text-success"></p></div>
+        <div th:if="${error}" class="alert-danger d-flex justify-content-center mt-10"><p th:text="${error}" class="text-danger"></p></div>
+        <div th:if="${param.error}" class="alert-danger d-flex justify-content-center mt-10"><p class="text-danger">Invalid credentials</p></div>
+        <div th:if="${param.success}" class="alert-success d-flex justify-content-center mt-10"><p>Successfully registered, please login to continue.</p></div>
+        <div th:if="${param.token_sent}" class="alert-success d-flex justify-content-center">! Token for password reset has been sent</div>
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30">Login</h3>
+                                        </div>
+                                        <form  th:action="@{/authenticate}" method="post">
+                                            <div class="form-group">
+                                                <input type="hidden" name="csrfToken" th:value="${session._csrf}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" name="email" placeholder="Your Email">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" name="password" placeholder="Password">
+                                            </div>
+                                            <div class="login_footer form-group">
+                                                <div class="chek-form">
+                                                    <div class="custome-checkbox">
+                                                        <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="">
+                                                        <label class="form-check-label" for="exampleCheckbox1"><span>Remember me</span></label>
+                                                    </div>
+                                                </div>
+                                                <button class="text-muted" style="border-radius: 2px" th:formaction="@{/forgot-password}">Forgot password?</button>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up">Log in</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-6">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30">Create an Account</h3>
+                                        </div>
+                                        <p class="mb-50 font-sm">
+                                            Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our privacy policy
+                                        </p>
+                                        <div>
+                                            <div class="form-group">
+                                                <span th:if="${result}"><span class="alert-danger" th:if="${result!=null && result.hasErrors() && result.getFieldError('username')!=null}" th:text="${result.getFieldError('username').getDefaultMessage()}"></span></span>
+                                                <input type="text" id="username" placeholder="Username">
+                                            </div>
+                                            <div class="form-group">
+                                                <span th:if="${result}"><span class="alert-danger" th:if="${result!=null && result.hasErrors() && result.getFieldError('email')!=null}" th:text="${result.getFieldError('email').getDefaultMessage()}"></span></span>
+                                                <input type="text" id="email" placeholder="Email">
+                                            </div>
+                                            <div class="form-group">
+                                                <span th:if="${result}"><span class="alert-danger" th:if="${result!=null && result.hasErrors() && result.getFieldError('phoneNumber')!=null}" th:text="${result.getFieldError('phoneNumber').getDefaultMessage()}"></span></span>
+                                                <input type="text"  id="phoneNumber"  placeholder="Phone Number">
+                                            </div>
+                                            <div class="form-group">
+                                                <span th:if="${result}"></span><span class="alert-danger" th:if="${result!=null && result.hasErrors() && result.getFieldError('password')!=null}" th:text="${result.getFieldError('password').getDefaultMessage()}"></span>
+                                                <input type="password" id="password" placeholder="Password">
+                                            </div>
+                                            <div class="form-group">
+                                                <span th:if="${result}"><span class="alert-danger" th:if="${result!=null && result.hasErrors() && result.getFieldError('confirmPassword')!=null}" th:text="${result.getFieldError('confirmPassword').getDefaultMessage()}"></span></span>
+                                                <input type="password" id="confirmPassword" placeholder="Confirm password">
+                                            </div>
+                                            <div class="login_footer form-group">
+                                                <div class="chek-form">
+                                                    <div class="custome-checkbox">
+                                                        <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox12" value="">
+                                                        <label class="form-check-label" for="exampleCheckbox12"><span>I agree to terms &amp; Policy.</span></label>
+                                                    </div>
+                                                </div>
+                                                <a href="page-privacy-policy.html"><i class="fi-rs-book-alt mr-5 text-muted"></i>Lean more</a>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <button onclick="submitSignup()" class="btn btn-fill-out btn-block hover-up">Submit &amp; Register</button>
+                                            </div>
+                                        </div>
+                                        <div class="divider-text-center mt-15 mb-15">
+                                            <span> or</span>
+                                        </div>
+                                        <ul class="btn-login list_none text-center mb-15">
+                                            <li><a th:href="@{/oauth2/authorization/google}" class="btn btn-google hover-up">Login With Google</a></li>
+                                        </ul>
+                                        <div class="text-muted text-center">Already have an account? <a href="#">Sign in now</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="/Fragments/fragments::footer"></footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:inline="javascript">
+
+        let token = /*[[${customer.getToken()}]]*/ '';
+        function submitSignup() {
+            const username = document.querySelector('#username').value;
+            const email = document.querySelector('#email').value;
+            const phoneNumber = document.querySelector('#phoneNumber').value;
+            const password = document.querySelector('#password').value;
+            const confirmPassword = document.querySelector('#confirmPassword').value;
+
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            const customerDto = {
+                username: username,
+                password: password,
+                confirmPassword: confirmPassword,
+                email: email,
+                phoneNumber: phoneNumber,
+                token: token
+            };
+
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify(customerDto)
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        window.location.href = '/signup/send-otp';
+                    }else if(response.status === 202){
+                        Swal.fire({
+                            title: 'Your Account has been converted from Google user to Vnilusso user, ' +
+                                'you can now login with your new password!',
+                            width: 600,
+                            padding: '3em',
+                            color: '#716add',
+                            background: '#fff url(/images/trees.png)',
+                            backdrop: `rgba(0,0,123,0.4)
+                                        url("/imgs/shop/theme/logo.svg")
+                                        left top
+                                        no-repeat`
+                        })
+                    }
+                    else if (response.status === 400) {
+                        response.json().then(errorResponse => {
+                            if(errorResponse.errors!=null && !errorResponse.errors.isEmpty)
+                                Swal.fire({
+                                    title: 'Validation Errors',
+                                    icon: 'error',
+                                    html: errorResponse.errors.at(0),
+                                });
+                        });
+                    } else if (response.status === 409) {
+                        Swal.fire({
+                            title:'Cannot Proceed',
+                            icon:'Error',
+                            html :'Account with this email already exists.'
+                        });
+                    } else {
+                        alert('An unexpected error occurred.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+    <!-- Template  JS -->
+    <script src="/js/main.js?v=3.4"></script>
+</body>
+
+</html>

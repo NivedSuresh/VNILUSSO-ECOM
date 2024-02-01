@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <header th:replace="/Fragments/fragments::header"></header>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Shop
+                    <span></span> Wishlist
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <h3 style="text-align: center" th:if="${wishlist==null || wishlist.getProducts()==null || wishlist.getProducts().size()<0}">Wishlist dry 🫡 </h3>
+                            <table th:if="${wishlist!=null && wishlist.getProducts()!=null && wishlist.getProducts().size()>0}" class="table shopping-summery text-center">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col" colspan="2">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Stock Status</th>
+                                        <th scope="col">Action</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="product : ${wishlist.getProducts()}">
+                                        <td class="image product-thumbnail"><img th:src="@{'/product-images/'+${product.getImagesUrls().get(0)}}" th:alt="${product.getName()}"></td>
+                                        <td class="product-des product-name">
+                                            <h5 class="product-name"><a th:text="${product.getName()}" th:href="@{product-details/{id}(id=${product.getId()})}"></a></h5>
+                                            <p class="font-xs" th:text="${product.getSize()}"></p>
+                                        </td>
+                                        <td class="price" data-title="Price"><span th:text="${'$'+product.getSalePrice()}"></span></td>
+                                        <td class="text-center" data-title="Stock">
+                                            <span th:if="${product.getQuantity()>=200}" class="color3 font-weight-bold text-success">In Stock</span>
+                                            <span th:if="${product.getQuantity()>=50 && product.getQuantity()<200}" class="color3 font-weight-bold text-warning">Might get sold</span>
+                                            <span th:if="${product.getQuantity()<50 && product.getQuantity()>0}" class="color3 font-weight-bold text-warning">Almost out of stock</span>
+                                            <span th:if="${product.getQuantity()<=0}" class="color3 font-weight-bold text-danger">Out of stock</span>
+                                        </td>
+                                        <td class="text-right" data-title="Cart">
+                                            <form method="post" th:action="@{/cart/add/{id}(id=${product.getId()})}">
+                                                <button class="btn btn-sm"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</button>
+                                            </form>
+                                        </td>
+                                        <td class="action" data-title="Remove"><a th:href="@{/wishlist/remove/{id}(id=${product.getId()})}"><i class="fi-rs-trash"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="/Fragments/fragments::footer"></footer>
+    <!-- Preloader Start -->
+    <div th:replace="/Fragments/fragments::pre-loader"></div>
+   <script th:replace="/Fragments/fragments::script"></script>
+</body>
+
+</html>

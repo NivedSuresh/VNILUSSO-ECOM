@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/Fragments/fragments::meta"></head>
+<body>
+<div class="container mt-100">
+  <div class="row">
+    <div class="col-md-6 d-grid justify-content-center p-30" style="background-color: whitesmoke">
+      <h1>Your Wallet</h1>
+      <p class="balance" th:text="${'Wallet Balance : $'+wallet.getBalance()}"></p>
+      <ul class="transactions">
+        (Implement transactions if time persists!!)
+      </ul>
+    </div>
+    <div class="col-md-6 d-grid justify-content-center p-30" style="background-color: whitesmoke">
+      <h1>Add Funds</h1>
+      <form class="add-funds-form">
+        <div class="form-group">
+          <label for="amount">Amount:</label>
+          <input type="text" class="form-control" id="amount">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Funds</button>
+      </form>
+    </div>
+  </div>
+  <div>
+    <div>
+      <h5 class="mt-30 alert-success text-center p-3">Refer someone who is not in the app yet and get $20 in your wallet!</h5>
+    </div>
+    <div class="d-flex mt-30">
+
+      <form class="d-flex" th:action="@{/wallet/refer}" method="post">
+        <input class="input-group-text" placeholder="email" name="referEmail">
+        &nbsp;
+        <button type="submit" class="btn btn-outline-warning">Refer</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
+

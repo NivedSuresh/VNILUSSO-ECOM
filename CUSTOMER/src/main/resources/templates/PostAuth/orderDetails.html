@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="/Fragments/fragments::meta"><title>Order Details</title></head>
+
+<body>
+    <header th:replace="/Fragments/fragments::header"></header>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Shop
+                    <span></span> Your Order
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div th:if="${order==null}" class="d-flex justify-content-center">
+                <h1>No Items</h1>
+            </div>
+            <div class="container" th:if="${order!=null}">
+                <div th:if="${order.getOrderItems().size()<=0}" class="d-flex justify-content-center">
+                    <h1>No Items</h1>
+                </div>
+                <div class="row" th:if="${order.getOrderItems().size()>0}">
+                    <div class="col-12">
+                        <form method="post">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.getToken()}">
+                            <div class="table-responsive">
+                                <table class="table shopping-summery text-center clean">
+                                    <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody sec:authorize="isAuthenticated()">
+                                    <tr th:each="item : ${order.getOrderItems()}">
+                                        <td class="image product-thumbnail"><img style="border-radius: 10px" th:src="@{'/product-images/'+${item.getProduct().getImagesUrls().get(0)}}" alt="#"></td>
+                                        <td class="product-des product-name">
+                                            <h5 class="product-name"><a th:href="@{/product-details/{id}(id=${item.getProduct().getId()})}" th:text="${item.getProduct().getName()}"></a></h5>
+                                        </td>
+                                        <td class="price" data-title="Price"><span th:text="${'$'+item.getProduct().getSalePrice()}"> </span></td>
+                                        <td th:text="${item.getSize()}"></td>
+                                        <td class="text-center" data-title="Stock">
+                                            <a style="width: 8vh" type="number" th:text="${item.getQuantityPerItem()}"></a>
+                                        </td>
+                                        <td class="text-right unit-price" data-title="Cart">
+                                            <span th:text="${item.getTotalPrice()+'$'}"> </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold" th:text="${'Total Items : '+order.getQuantity()}"></td>
+                                        <td class="fw-bold" th:text="${'Payment Method : '+order.getPaymentMethod()}"></td>
+                                        <td th:if="${order.getOrderStatus()=='PROCESSING'}" colspan="6" class="text-end">
+                                            <button th:formaction="@{/order/cancel/{id}(id=${order.getId()})}" class="text-danger" style="border-radius: 5px"> <i class="fi-rs-cross-small"></i> Cancel Order</button>
+                                            <pre style="font-size: 10px">(ORDER CANNOT BE CANCELLED ONCE ACCEPTED)</pre>
+                                        </td>
+                                        <td th:if="${order.getOrderStatus()=='DELIVERED'}">
+                                            <button style="border-radius: 10px" class="btn-outline-danger" th:formaction="@{/order/return/{id}(id=${order.getId()})}">Return</button>
+                                            <pre style="font-size: 10px">(Order Cannot be Returned 7 days after Delivery)</pre>
+                                        </td>
+                                        <td th:if="${order.getOrderStatus()=='RETURN' && order.getReturnRequest().getReturnRequest()}">
+                                            Return Requested<span style="font-size: 10px; color: black"> (Refund will be initiated after verifying the return)</span>
+                                            <p th:text="${'Refund Amount : '+order.getReturnRequest().getRefundAmount()}+'$'"></p>
+                                        </td>
+                                        <td th:if="${order.getOrderStatus()=='CANCELLED' && order.getPaymentMethod()=='RAZORPAY'}" class="text-danger">
+                                            <p th:text="${'Refund Amount : '+(order.getTotalPrice()-order.getTax())}+'$'"></p>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-bordered">
+                                        <td class="fw-bold" th:text="${'Payment Status : '+order.getPayment().getStatus()}"></td>
+                                        <td th:text="${'Refund Status : '+order.getPayment().getRefundStatus()}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--hello-->
+                        </form>
+                        <form class="text-end" th:action="@{/download/invoice}" method="post">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.getToken()}">
+                            <input type="hidden" th:value="${order.getId()}" name="orderId">
+                            <button class="d-grid align-content-center" type="submit">Download Invoice</button>
+                        </form>
+                        <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+
+                        <div class="d-flex">
+                            <div class="table-responsive" style="width: 100%">
+                                <table class="table d-inline-flex">
+                                    <tbody>
+                                    <tr>
+                                        <td class="cart_total_label">Items Total</td>
+                                        <td class="cart_total_amount"><span class="font-lg fw-900 text-brand" th:text="${(order.getTotalPrice()-order.getTax())+'$'}"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_total_label">Tax</td>
+                                        <td class="cart_total_amount"><span class="font-lg fw-900 text-brand" th:text="${order.getTax()+'$'}"></span></td>
+                                    </tr>
+                                    <tr th:if="${order.getPaymentMethod()!='COD'}">
+                                        <td class="">Payment Online</td>
+                                        <td class="ont-lg fw-900 text-brand fw-bold"> <i class="font-xl fw-900 text-brand" th:text="${order.getPayment().getAmount()+'$'}"></i></td>
+                                    </tr>
+                                    <tr th:if="${order.getPaymentMethod()=='COD'}">
+                                        <td class="">Payment COD</td>
+                                        <td class="ont-lg fw-900 text-brand fw-bold"> <i class="font-xl fw-900 text-brand" th:text="${order.getPayment().getAmount()+'$'}"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">Deducted From Wallet</td>
+                                        <td class="ont-lg fw-900 text-brand fw-bold"> <i class="font-xl fw-900 text-brand" th:text="${order.getPayment().getDeductedFromWallet()+'$'}"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Order Subtotal</td>
+                                        <td class="ont-lg fw-900 text-brand"><strong><span class="font-xl fw-900 text-brand" th:text="${order.getTotalPrice()+'$'}"></span></strong></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="alert-warning p-20" th:if="${order.getReturnRequest()!=null && order.getReturnRequest().getReturnAccepted()==true}">
+                                <p class="mt-40">Refund was initiated on
+                                    <span th:text="${order.getReturnRequest().getReturnedDate().toLocaleString()}"></span>
+                                     . Please contact your bank for refund related queries if payment was made online, contact vnilusso@gmail.com for Cash On Delivery.
+                                </p>
+                            </div>
+
+                            <div th:if="${order.getOrderStatus()=='PROCESSING'}" sec:authorize="isAuthenticated()" class="col-md-6">
+                                <div class="mb-25">
+                                    <h4 class="alert-warning">Billing Details can only be Updated during Order processing</h4>
+                                </div>
+                                <form method="post" th:action="@{/address/update/order-address/{id}(id=${orderAddress.getId()})}" th:object="${orderAddress}">
+                                    <input type="hidden" name="orderId" th:value="${order.getId()}">
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('recipientName')}" th:errors="*{recipientName}"></div>
+                                        <input th:value="${orderAddress.getRecipientName()}" type="text" name="recipientName" placeholder="Recipient Name *">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+                                        <input th:value="${orderAddress.getPhoneNumber()}" type="text" name="phoneNumber" placeholder="Phone *">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('houseName')}" th:errors="*{houseName}"></div>
+                                        <input th:value="${orderAddress.getHouseName()}" type="text" name="houseName" placeholder="House number/name">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('addressLine')}" th:errors="*{addressLine}"></div>
+                                        <input type="text" th:value="${orderAddress.getAddressLine()}" name="addressLine" placeholder="Address *">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('district')}" th:errors="*{district}"></div>
+                                        <input th:value="${orderAddress.getDistrict()}" type="text" name="district" placeholder="District">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+                                        <input th:value="${orderAddress.getCity()}" type="text" name="city" placeholder="City / Town *">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></div>
+                                        <input th:value="${orderAddress.getState()}" type="text" name="state" placeholder="State / County *">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}"></div>
+                                        <input th:value="${orderAddress.getZipcode()}" type="text" name="zipcode" placeholder="Postcode / ZIP *">
+                                    </div>
+                                    <div class=" mt-10 mb-10">
+                                        <h5>Additional information</h5>
+                                    </div>
+                                    <div class="form-group mb-30">
+                                        <textarea th:text="${orderAddress.getNotes()}" rows="5" name="notes" placeholder="Order notes"></textarea>
+                                    </div>
+                                    <div class="payment_method">
+                                        <div class="mb-25">
+                                            <h5>Type of Address</h5>
+                                        </div>
+                                        <div class="payment_option">
+                                            <div class="custome-radio">
+                                                <input th:checked="${orderAddress.getTypeOfAddress()=='Home'}" class="form-check-input" th:value="${'Home'}" type="radio" name="typeOfAddress" id="exampleRadios3" checked="">
+                                                <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">Home</label>
+                                            </div>
+                                            <div class="custome-radio">
+                                                <input th:checked="${orderAddress.getTypeOfAddress()=='Company'}"  class="form-check-input" th:value="${'Company'}" type="radio" name="typeOfAddress" id="exampleRadios4" checked="">
+                                                <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Company</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button class="btn">Update Address</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="/Fragments/fragments::footer"></footer>
+    <div th:replace="/Fragments/fragments::pre-loader"></div>
+    <script th:replace="/Fragments/fragments::script-shop"></script>
+</body>
+
+</html>

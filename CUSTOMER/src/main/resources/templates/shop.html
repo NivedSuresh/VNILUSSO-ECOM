@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head th:replace="Fragments/fragments::meta"></head>
+
+<body>
+    <!-- Quick view -->
+    <header th:replace="Fragments/fragments::header"></header>
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a th:href="@{/}" rel="nofollow">Home</a>
+                    <span></span> Shop
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row flex-row-reverse">
+                    <div class="col-lg-9">
+                        <div class="shop-product-fillter">
+                            <div class="totall-product">
+                                <p th:if="${products}"> We found <strong class="text-brand" th:text="${products.size()}"></strong> items for you!</p>
+                            </div>
+
+                            <!--sort by area-->
+                            <div class="sort-by-product-area">
+                                <div class="sort-by-cover">
+                                    <div class="sort-by-product-wrap">
+                                        <div class="sort-by">
+                                            <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                        </div>
+                                        <div class="sort-by-dropdown-wrap">
+                                            <span th:if="${option==null || option==1}"> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                            <span th:if="${option==2}"> Price: Low to High <i class="fi-rs-angle-small-down"></i></span>
+                                            <span th:if="${option==3}"> Price: High to Low <i class="fi-rs-angle-small-down"></i></span>
+                                        </div>
+                                    </div>
+                                    <form class="sort-by-dropdown" method="post" th:action="@{/sort}">
+                                        <ul>
+                                            <li><button style="width: 100%" name="option" th:value="${1}" class="active btn-shadow-brand">Featured</button></li>
+                                            <li><button style="width: 100%" name="option" th:value="${2}" class="btn-shadow-brand">Price: Low to High</button></li>
+                                            <li><button style="width: 100%" name="option" th:value="${3}" class="btn-shadow-brand">Price: High to Low</button></li>
+                                        </ul>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- products-->
+
+                        <div class="row product-grid-4">
+                            <div class=" col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12" th:each="product:  ${products}">
+                                <div th:replace="/Fragments/product-fragments::product-wrap"></div>
+                            </div>
+                        </div>
+
+
+                        <!--pagination-->
+                        <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-start">
+                                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                                    <li class="page-item"><a class="page-link" href="#"><i class="fi-rs-angle-double-small-right"></i></a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!--pagination-->
+
+                    </div>
+
+                    <!--sticky bar-->
+                    <div th:replace="/Fragments/fragments::sticky-sidebar"></div>
+                    <!--sticky bar-->
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <footer th:replace="Fragments/fragments::footer"></footer>
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vendor JS-->
+    <div th:replace="Fragments/fragments::script-shop"></div>
+</body>
+
+</html>

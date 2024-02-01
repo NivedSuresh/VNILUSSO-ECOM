@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="product-grid" class="row product-grid-4">
+    <div class=" col-xl-4 col-lg-6 col-md-6 col-12 col-sm-12" th:each="product:  ${products}">
+        <div th:fragment="product-wrap" class="product-cart-wrap" >
+            <div class="product-img-action-wrap">
+                <div class="product-img product-img-zoom">
+                    <a th:href="@{/product-details/{productId}(productId=${product.getId()})}" th:each="image : ${product.getImagesUrls()}">
+                        <img class="default-img" th:src="@{product-images/} + ${image}" alt="">
+                    </a>
+                </div>
+                <form method="post" class="product-action-1">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.getToken()}">
+                    <button aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></button>
+                    <a aria-label="Add To Wishlist" class="action-btn hover-up" th:href="@{/wishlist/add/{id}(id=${product.getId()})}"><i class="fi-rs-heart"></i></a>
+                    <button aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></button>
+                </form>
+            </div>
+            <div class="product-content-wrap">
+                <div class="product-category">
+                    <a th:text="${product.getCategory().getCategory()}"></a>
+                </div>
+                <h2><a th:href="@{/product-details/{productId}(productId=${product.getId()})}" th:text="${product.getName()}"></a></h2>
+                <div class="rating-result" title="90%">
+                                    <span>
+                                        <span>70%</span>
+                                    </span>
+                </div>
+                <div class="product-price">
+                    <span th:text="${product.getSalePrice()+'$'}"></span>
+                    <span class="old-price" th:text="${product.getCostPrice()+'$'}"></span>
+                    <span  th:if="${product.getCategory().getDiscountPercentage()>0.0}" class="ml-10 text-success" style="font-size: smaller" th:text="${'Extra '+product.getCategory().getDiscountPercentage()+'% off'}"></span>
+                </div>
+                <form class="product-action-1 show" th:action="@{/cart/add/{id}(id=${product.getId()})}" method="post">
+                    <button type="submit" aria-label="Add To Cart" class="d-flex justify-content-center action-btn hover-up"><i class="fi-rs-shopping-bag-add"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

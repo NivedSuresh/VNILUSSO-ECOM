@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+
+<header th:replace="/Fragments/fragments::header"></header>
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" rel="nofollow">Home</a>
+        <span></span> Shop
+        <span></span> Checkout
+      </div>
+    </div>
+  </div>
+  <section class="mt-50 mb-50">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="divider mt-50 mb-50"></div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div sec:authorize="isAuthenticated()" class="col-md-6">
+          <div class="mb-25">
+            <h4>Address Details</h4>
+          </div>
+          <form method="post" th:action="@{/address/update/{id}(id=${addressDto.getId()})}" th:object="${addressDto}">
+            <div class="form-group">
+              <input th:value="${addressDto.getId()}" type="hidden" name="id" placeholder="Recipient Name *">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('recipientName')}" th:errors="*{recipientName}"></div>
+              <input th:value="${addressDto.getRecipientName()}" type="text" name="recipientName" placeholder="Recipient Name *">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+              <input th:value="${addressDto.getPhoneNumber()}" type="text" name="phoneNumber" placeholder="Phone *">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('houseName')}" th:errors="*{houseName}"></div>
+              <input th:value="${addressDto.getHouseName()}" type="text" name="houseName" placeholder="House number/name">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('addressLine')}" th:errors="*{addressLine}"></div>
+              <input th:value="${addressDto.getAddressLine()}" type="text" name="addressLine" placeholder="Address *">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('district')}" th:errors="*{district}"></div>
+              <input th:value="${addressDto.getDistrict()}" type="text" name="district" placeholder="District">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+              <input th:value="${addressDto.getCity()}" type="text" name="city" placeholder="City / Town *">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></div>
+              <input th:value="${addressDto.getState()}" type="text" name="state" placeholder="State / County *">
+            </div>
+            <div class="form-group">
+              <div class="text-danger" th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}"></div>
+              <input th:value="${addressDto.getZipcode()}" type="text" name="zipcode" placeholder="Postcode / ZIP *">
+            </div>
+            <div class="form-group mt-4">
+              <label>
+                Default Address
+                <input value="true" name = "isDefault" type="checkbox" th:checked="${addressDto.getIsDefault()}">
+              </label>
+            </div>
+            <div class=" mt-10 mb-10">
+              <h5>Additional information</h5>
+            </div>
+            <div class="form-group mb-30">
+              <textarea th:text="${addressDto.getNotes()}" rows="5" name="notes" placeholder="Order notes"></textarea>
+            </div>
+            <div class="payment_method">
+              <div class="mb-25">
+                <h5>Type of Address</h5>
+              </div>
+              <div class="payment_option">
+                <div class="custome-radio">
+                  <input class="form-check-input" th:value="${'Home'}" type="radio" name="typeOfAddress" id="exampleRadios3" th:checked="${addressDto.getTypeOfAddress()=='Home'}">
+                  <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">Home</label>
+                </div>
+                <div class="custome-radio">
+                  <input class="form-check-input" th:value="${'Company'}" type="radio" name="typeOfAddress" id="exampleRadios4" th:checked="${addressDto.getTypeOfAddress()=='Company'}">
+                  <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Company</label>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button class="btn" type="submit">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer th:replace="/Fragments/fragments::footer"></footer>
+<div th:replace="/Fragments/fragments::pre-loader"></div>
+<script th:replace="/Fragments/fragments::script-shop"></script>
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <header th:replace="/Fragments/fragments::header"></header>
+
+    <main class="main-wrap">
+        <section class="content-main">
+            <div class="content-header">
+                <div class="d-flex justify-content-center mt-10">
+                    <h2 class="content-title card-title">Orders </h2>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto d-flex">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button class="btn ml-3">Search</button>
+                        </div>
+                        <div class="col-lg-2 col-6 col-md-3">
+                            <select class="form-select">
+                                <option>Status</option>
+                                <option>Active</option>
+                                <option>Disabled</option>
+                                <option>Show all</option>
+                            </select>
+                        </div>
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <form method="post" class="table-responsive">
+                        <table class="table table-hover" style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th scope="col">Recipient Name</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">Total Items</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Order Date</th>
+                                    <th scope="col">Delivery Date</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Tax</th>
+                                    <th scope="col">Payment Method</th>
+                                    <th scope="col"> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="order : ${orders}">
+                                    <td th:text="${order.getId()}"></td>
+                                    <td><b th:text="${order.getOrderAddress().getRecipientName()}"></b></td>
+                                    <td th:text="${order.getOrderAddress().getPhoneNumber()}" ></td>
+                                    <td th:text="${order.getQuantity()}"></td>
+                                    <td th:if="${order.getOrderStatus()=='ACCEPTED'}"><span class="badge rounded-pill alert-success">Accepted</span></td>
+                                    <td th:if="${order.getOrderStatus()=='PROCESSING'}"><span class="badge rounded-pill alert-warning">Processing</span></td>
+                                    <td th:if="${order.getOrderStatus()=='DELIVERED'}"><span class="badge rounded-pill alert-success">Delivered</span></td>
+                                    <td th:if="${order.getOrderStatus()=='RETURN'}"><span class="badge rounded-pill alert-danger">Return</span></td>
+                                    <td th:if="${order.getOrderStatus()=='CANCELLED'}"><span class="badge rounded-pill alert-danger">Cancelled</span></td>
+                                    <td th:if="${order.getOrderStatus()=='SHIPPED'}"><span class="badge rounded-pill alert-primary">Shipped</span></td>
+                                    <td th:text="${order.getOrderDate()}"></td>
+                                    <td th:text="${order.getDeliveryDate()}"></td>
+                                    <td th:text="${order.getTotalPrice()+'$'}"></td>
+                                    <td th:text="${order.getTax()+'$'}"></td>
+                                    <td th:text="${order.getPaymentMethod()}"></td>
+                                    <td class="d-grid">
+                                        <a th:href="@{/order/details/{id}(id=${order.getId()})}" class="alert-info d-grid align-content-center" style="width: 12vh; height: 4vh; border-radius: 5px">View Details</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-15 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer th:replace="/Fragments/fragments::footer"></footer>
+    </main>
+<!--    <script th:replace="/Fragments/fragments::script"></script>-->
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
+</html>

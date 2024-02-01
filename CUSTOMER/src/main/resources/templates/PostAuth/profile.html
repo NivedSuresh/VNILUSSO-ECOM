@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-settings-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:49 GMT -->
+<head th:replace="/Fragments/fragments::meta"></head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <main class="main-wrap">
+        <header th:replace="/Fragments/fragments::header"></header>
+        <section class="content-main">
+            <div class="content-header d-grid justify-content-center mt-4 mb-4">
+                <h2 class="content-title">Profile Settings</h2>
+            </div>
+            <div class="alert-danger d-flex justify-content-center" th:if="${param.error}">Couldn't Update as Input field has errors</div>
+            <div th:if="${param.success}" class="d-flex justify-content-center alert-success">Password Changed Successfully</div>
+            <div th:if="${param.sent}" class="d-flex justify-content-center alert-success">Password reset token was sent to your email</div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row gx-5">
+                        <aside class="col-lg-3 border-end">
+                            <h4>Addresses</h4>
+                            <nav th:each="address: ${addresses}" class="nav nav-pills flex-lg-column mb-4">
+                                <a class="mt-4" th:text="${address.getHouseName()}" th:href="@{/address/{id}(id=${address.getId()})}"></a>
+                            </nav>
+                        </aside>
+                        <div class="col-lg-9">
+                            <section class="content-body p-xl-4">
+                                <form method="post" th:action="@{/profile/update}" th:object="${customer}">
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="row gx-3">
+                                                <div class="col-6  mb-3">
+                                                    <label class="form-label">Username</label>
+                                                    <input class="form-control" name="username" th:value="${customer.getUsername()}" type="text" placeholder="Type here">
+                                                </div> <!-- col .// -->
+                                                <div class="col-lg-6  mb-3">
+                                                    <label class="form-label">Email</label>
+                                                    <input class="form-control" name="email" th:value="${customer.getEmail()}" placeholder="example@mail.com">
+                                                </div> <!-- col .// -->
+                                                <div class="col-lg-6  mb-3">
+                                                    <label class="form-label">Phone</label>
+                                                    <input class="form-control" name="phoneNumber" th:value="${customer.getPhoneNumber()}" type="tel" placeholder="+1234567890">
+                                                </div> <!-- col .// -->
+                                            </div> <!-- row.// -->
+                                        </div> <!-- col.// -->
+                                        <aside class="col-lg-2 ml-40">
+                                            <figure class="text-lg-center">
+                                                <img class="img-lg mb-3 img-avatar" src="/imgs/page/avatar-1.jpg" alt="User Photo">
+                                                <figcaption>
+                                                    <a class="btn btn-light rounded font-md" href="#">
+                                                        <i class="icons material-icons md-backup font-md"></i> Upload
+                                                    </a>
+                                                </figcaption>
+                                            </figure>
+                                        </aside> <!-- col.// -->
+                                    </div> <!-- row.// -->
+                                    <br>
+                                    <button class="btn btn-primary" type="submit">Save changes</button>
+                                </form>
+                                <hr class="my-5">
+                                <div class="row" style="max-width:920px">
+                                    <form class="col-md" th:action="@{/profile/change-password}">
+                                        <article class="box mb-3 bg-light p-4" style="border-radius: 5px">
+                                            <button type="submit" class="btn float-end btn-light btn-sm rounded font-md mt-15 mr-20">Change</button>
+                                            <h6 style="text-align: center">Password</h6>
+                                            <small class="text-muted d-block" style="width:70%; text-align: center">You can reset or change your password by clicking here</small>
+                                        </article>
+                                    </form> <!-- col.// -->
+                                    <div class="col-md">
+                                        <article class="box mb-3 bg-light p-4" style="text-align: center; border-radius: 5px">
+                                            <a class="btn float-end btn-light rounded btn-sm font-md mt-10 mr-15" href="#">Deactivate</a>
+                                            <h6>Remove account</h6>
+                                            <small class="text-muted d-block" style="width:70%">Once you delete your account, there is no going back.</small>
+                                        </article>
+                                    </div> <!-- col.// -->
+                                </div> <!-- row.// -->
+                            </section> <!-- content-body .// -->
+                        </div> <!-- col.// -->
+                    </div> <!-- row.// -->
+                </div> <!-- card body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <footer th:replace="/Fragments/fragments::footer"></footer>
+    </main>
+    <script th:replace="/Fragments/fragments::script"></script>
+</body>
+
+</html>
