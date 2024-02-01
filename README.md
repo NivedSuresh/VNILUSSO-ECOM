@@ -11,5 +11,5 @@
                                                     * STATISTICS (DAILY, WEEKLY, MONTHLY, MOST SOLD PRODUCT/CATEGORY etc)
                                                     * USER MANAGEMENT, ORDER MANAGEMET, CATEGORY MANAGEMENT FOR ADMIN
                                                     * REFERAL ENABLE/DISABLE, COUPON MANAGEMENT FOR ADMIN
-                                                    * OTP LOGIN & SIGNUP, PASSWORD RESET USING TOKENS
+                                                    * 2FA LOGIN & SIGNUP, PASSWORD RESET USING TOKENS
                                                       
