@@ -1,7 +1,7 @@
                                   A Multi Module Monolithic E-COMMERCE application.
                                                 
                 `                        * PAYMENT INTEGRATION
-                                         * CSV/PDF, INVOICE DOWNLOA
+                                         * CSV/PDF, INVOICE DOWNLOAD
                                          * ADMIN AND CUSTOMER ROLES
                                          * ORDER CANCELLATION AND RETURN WITH TIMEOUT
                                          * COUPONS, REFERRAL, WISHLIST, CART
