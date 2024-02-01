@@ -8,4 +8,5 @@
                                                     * REFUND FOR BOTH RAZORPAY AND COD
                                                     * NOTIFICATION SERVICE (JAVA MAIL API)
                                                     * OAUTH2 GOOGLE SIGN IN
+                                                    * STATISTICS (DAILY, WEEKLY, MONTHLY, MOST SOLD PRODUCT/CATEGORY etc)
                                                       
