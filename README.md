@@ -1,4 +1,4 @@
-                                  A Multi Module Monolithic E-COMMERCE application.
+                                  A Server Side Rendered Multi Module Monolithic E-COMMERCE application.
                                                 
                 `                        * PAYMENT INTEGRATION
                                          * CSV/PDF, INVOICE DOWNLOAD
