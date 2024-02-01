@@ -1,9 +1,10 @@
                                          A Multi Module Monolithic E-COMMERCE application.
                                                       
                                                     * PAYMENT INTEGRATION
-                                                    * CSV/PDF DOWNLOAD
+                                                    * CSV/PDF, INVOICE DOWNLOAD
                                                     * ADMIN AND CUSTOMER ROLES
-                                                    * ORDER CANCELLATION, RETURN, COUPONS, REFERRAL, WISHLIST, CART
+                                                    * ORDER CANCELLATION AND RETURN WITH TIMEOUT
+                                                    * COUPONS, REFERRAL, WISHLIST, CART
                                                     * PAYMENT INTEGRATION (RAZOR PAY)
                                                     * REFUND FOR BOTH RAZORPAY AND COD
                                                     * NOTIFICATION SERVICE (JAVA MAIL API)
@@ -12,4 +13,5 @@
                                                     * USER MANAGEMENT, ORDER MANAGEMET, CATEGORY MANAGEMENT FOR ADMIN
                                                     * REFERAL ENABLE/DISABLE, COUPON MANAGEMENT FOR ADMIN
                                                     * 2FA LOGIN & SIGNUP, PASSWORD RESET USING TOKENS
+                                                    * USER PROFILE MANAGEMENT
                                                       
